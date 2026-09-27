@@ -1,4 +1,4 @@
-# 🔴 RedditClone — Community-Based Social Platform
+# 🔴 SocialMedia
 
 A **Reddit-inspired** social media platform built with **Django**. Users can create communities (subreddits), join them, submit posts, vote on posts and comments, and take part in nested comment discussions.
 
@@ -57,7 +57,6 @@ A **Reddit-inspired** social media platform built with **Django**. Users can cre
 |---|---|
 | Language | Python |
 | Backend Framework | Django |
-| Database (development) | SQLite3 |
 | Templating | Django Template Language (DTL) |
 | Authentication | Django Auth (default `User` model) |
 
@@ -85,7 +84,6 @@ A **Reddit-inspired** social media platform built with **Django**. Users can cre
 │   ├── urls.py
 │   └── views.py
 │
-├── db.sqlite3
 └── manage.py
 ```
 
