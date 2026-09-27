@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  r/{{ community.slug }}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <!-- MAIN CONTENT -->
+    <div class="col-md-8">
+      <!-- Community header -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4 class="mb-1">r/{{ community.slug }}</h4>
+          <p class="text-muted mb-2">Created by {{ community.created_by.username }}</p>
+          <p>{{ community.description }}</p>
+
+          <!-- Owner actions -->
+          {% if user.id == community.created_by.id %}
+            <a href="{% url 'community_update' community.slug %}" class="btn btn-sm btn-outline-secondary">Update</a>
+            <a href="{% url 'community_delete' community.slug %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- New post -->
+      <div class="mb-3">
+        <a href="{% url 'post_add' community.slug %}" class="btn btn-success w-100">+ Create Post</a>
+      </div>
+
+      <!-- Posts -->
+      {% for post in community.root_posts.all %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h5>
+
+            <small class="text-muted">Posted by {{ post.author.username }} • Score {{ post.score }}</small>
+
+            <p class="mt-2">{{ post.content|truncatewords:30 }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted">No posts yet.</p>
+      {% endfor %}
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h6>About Community</h6>
+
+          {% if is_member %}
+            <form action="{% url 'community_leave' community.slug %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger w-100">Leave</button>
+            </form>
+          {% else %}
+            <form action="{% url 'community_join' community.slug %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-primary w-100">Join</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

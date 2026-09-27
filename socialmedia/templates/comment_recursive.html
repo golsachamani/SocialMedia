@@ -1,0 +1,46 @@
+<div class="card mb-2 ms-{{ forloop.parentloop|default:0|add:'3' }}">
+  <div class="card-body">
+    <small class="text-muted">{{ comment.author.username }}</small>
+    <p class="mt-2 mb-1">{{ comment.content }}</p>
+
+    <!-- SCORE + UPVOTES/DOWNVOTES -->
+    <small class="text-muted d-flex align-items-center gap-2">
+      <span>Score: {{ comment.score }}</span>
+
+      {% if user.is_authenticated %}
+        <!-- Upvote -->
+        <form method="post" action="{% url 'toggle_vote' comment.community.slug comment.slug 'up' %}" class="m-0 p-0">
+          {% csrf_token %}
+          <button type="submit" class="btn p-0" style="border: none; background: none;"><i class="bi bi-caret-up-fill"></i></button>
+        </form>
+
+        <!-- Downvote -->
+        <form method="post" action="{% url 'toggle_vote' comment.community.slug comment.slug 'down' %}" class="m-0 p-0">
+          {% csrf_token %}
+          <button type="submit" class="btn p-0" style="border: none; background: none;"><i class="bi bi-caret-down-fill"></i></button>
+        </form>
+
+        <!-- Reply as arrow -->
+        <button type="button" class="btn p-0" style="border: none; background: none;" data-target="reply-form-{{ comment.id }}" onclick="document.getElementById('reply-form-{{ comment.id }}').classList.toggle('d-none')"><i class="bi bi-reply-fill"></i></button>
+        {% if user == comment.author %}
+          <a href="{% url 'post_update' comment.community.slug comment.slug %}" class="btn p-0" style="border: none; background: none;"><i class="bi bi-pencil-fill"></i></a>
+
+          <a href="{% url 'post_delete' comment.community.slug comment.slug %}" class="btn p-0" style="border: none; background: none;"><i class="bi bi-trash-fill"></i></a>
+        {% endif %}
+      {% endif %}
+    </small>
+
+    <!-- Reply Form (Hidden) -->
+    <form id="reply-form-{{ comment.id }}" class="reply-form d-none mt-2" action="{% url 'comment_add' community_slug=comment.parent.community.slug|default:comment.community.slug post_slug=comment.parent.slug|default:comment.slug %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+      <textarea name="content" class="form-control mb-2" rows="2" placeholder="Write your reply..."></textarea>
+      <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+    </form>
+
+    <!-- RECURSIVE CHILD COMMENTS -->
+    {% for child in comment.replies.all %}
+      {% include 'comment_recursive.html' with comment=child %}
+    {% endfor %}
+  </div>
+</div>

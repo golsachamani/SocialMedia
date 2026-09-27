@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+  Delete
+{% endblock %}
+{% block content %}
+  <h1>Delete Community</h1>
+
+  <p>Are you sure you want to delete "{{ object.name }}"?</p>
+
+  <form method="post" action="{% url 'community_delete' object.slug %}">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'community_detail' object.slug %}">Cancel</a>
+  </form>
+{% endblock %}

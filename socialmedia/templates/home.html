@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+
+  <!-- MAIN FEED -->
+  <div class="col-md-8">
+
+    {% for community in communities %}
+      <div class="mb-4">
+
+        <!-- Community title -->
+        <div class="mb-2">
+          <small class="text-muted">
+            <a href="{{ community.get_absolute_url }}">r/{{ community.slug }}</a>
+          </small>
+        </div>
+
+        <!-- Posts -->
+        {% for post in community.post_set.all %}
+          {% if not post.parent %}
+            <div class="card mb-3">
+              <div class="card-body">
+
+                <h5 class="mb-1">
+                  <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h5>
+
+                <small class="text-muted">
+                  Posted by {{ post.author.username }}
+                </small>
+
+                <p class="mt-2 mb-0">
+                  {{ post.content|truncatewords:25 }}
+                </p>
+
+              </div>
+            </div>
+          {% endif %}
+        {% empty %}
+          <p class="text-muted">No posts in this community yet.</p>
+        {% endfor %}
+
+      </div>
+    {% empty %}
+      <p class="text-muted">No communities yet.</p>
+    {% endfor %}
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h6>Explore</h6>
+        <p class="text-muted mb-2">
+          Discover communities and join the discussion.
+        </p>
+        <a href="{% url 'community_list' %}" class="btn btn-outline-primary w-100">
+          Browse Communities
+
+{% endblock %}

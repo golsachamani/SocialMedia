@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+      {% block title %}
+        Reddit Clone
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+    <style>
+      body {
+        background-color: #dae0e6;
+      }
+      
+      .navbar {
+        background-color: #ffffff;
+        border-bottom: 1px solid #ddd;
+      }
+      
+      .reddit-logo {
+        font-weight: bold;
+        color: #ff4500;
+        text-decoration: none;
+      }
+      
+      .content-wrapper {
+        margin-top: 20px;
+      }
+      
+      .card {
+        border-radius: 6px;
+      }
+      
+      a {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="reddit-logo" href="{% url 'home' %}">reddit</a>
+
+        <ul class="navbar-nav ms-4">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'community_list' %}">Communities</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'community_add' %}">Create Community</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-danger" href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container content-wrapper">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
