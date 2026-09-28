@@ -143,8 +143,6 @@ The project will be available at:
 http://127.0.0.1:8000/
 ```
 
-> ⚠️ If `requirements.txt` doesn't exist yet, generate it with `pip freeze > requirements.txt`.
-
 ---
 
 ## 🔗 Main Routes
